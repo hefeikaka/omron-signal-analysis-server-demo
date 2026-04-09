@@ -1,0 +1,122 @@
+{
+	"url": "setting-assembly",
+	"owner": "admin",
+	"name": "setting-assembly",
+	"description": "",
+	"landingPage": "home",
+	"parentId": "0",
+	"isAutoHeight": true,
+	"content": {
+		"properties": {},
+		"pages": [
+			{
+				"id": "home",
+				"name": "Home",
+				"height": 940,
+				"content": [
+					{
+						"type": "column",
+						"isClosable": true,
+						"title": "",
+						"content": [
+							{
+								"type": "row",
+								"isClosable": true,
+								"title": "",
+								"height": 100,
+								"content": [
+									{
+										"type": "stack",
+										"isClosable": true,
+										"title": "",
+										"width": 50,
+										"content": [
+											{
+												"title": "AssemblySettingSearchWidget",
+												"type": "component",
+												"component": "AssemblySettingSearchWidget",
+												"props": {
+													"id": "AssemblySettingSearchWidget",
+													"configs": {
+														"pubsub": {
+															"types": [
+																"publisher"
+															]
+														},
+														"isGenerated": false,
+														"options": {},
+														"params": {
+															"status": "dispatched"
+														}
+													},
+													"widgetID": "AssemblySettingSearchWidget"
+												},
+												"isClosable": false,
+												"header": {
+													"show": false
+												},
+												"componentName": "lm-react-component"
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "row",
+								"isClosable": true,
+								"title": "",
+								"height": 100,
+								"content": [
+									{
+										"type": "stack",
+										"isClosable": true,
+										"title": "",
+										"width": 50,
+										"content": [
+											{
+												"title": "MachineSegmentListWidget",
+												"type": "component",
+												"component": "MachineSegmentListWidget",
+												"props": {
+													"id": "MachineSegmentListWidget",
+													"addUrl": "/setting/assembly/add",
+													"editUrl": "/setting/assembly/edit",
+													"subEditUrl": "/setting/assembly/edit",
+													"configs": {
+														"pubsub": {
+															"types": [
+																"subscriber"
+															],
+                                                            "publishers": [
+                                                                "AssemblySettingSearchWidget"
+                                                            ]
+														},
+														"isGenerated": false,
+														"options": {},
+														"params": {
+															"status": "dispatched"
+														}
+													},
+													"widgetID": "MachineSegmentListWidget"
+												},
+												"isClosable": false,
+												"header": {
+													"show": false
+												},
+												"componentName": "lm-react-component"
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	"hasOwnerPermission": false,
+	"hasDesignerPermission": false,
+	"hasViewerPermission": false,
+	"message": "success"
+}
