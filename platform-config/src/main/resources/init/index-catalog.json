@@ -1,0 +1,13 @@
+{
+  "indices": [
+    "signal-analysischannel-process-v1.0",
+    "signal-analysisindex-history-v1.0",
+    "signal-analysisalarm-suppress-history-v1.0",
+    "signal-analysisstatus-history-v1.0",
+    "signal-analysisstatus-stat-history-v1.0",
+    "signal-analysisindex-stat-history-v1.0",
+    "signal-analysisalarm-history-v1.0",
+    "signal-analysisstatus-suppress-history-v1.0",
+    "signal-analysisalarm-stat-history-v1.0"
+  ]
+}
