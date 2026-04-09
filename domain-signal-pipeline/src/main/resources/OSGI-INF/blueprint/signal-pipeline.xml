@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <bean id="signalMessageFormatter" class="com.omron.oss.domain.signal.pipeline.SignalMessageFormatter"/>
+    <bean id="loggingMessagePublisher" class="com.omron.oss.integration.jms.LoggingMessagePublisher"/>
+    <bean id="inMemorySignalRecordRepository" class="com.omron.oss.integration.mongodb.InMemorySignalRecordRepository"/>
+    <bean id="signalPublishingService" class="com.omron.oss.domain.signal.pipeline.SignalPublishingService">
+        <argument ref="signalMessageFormatter"/>
+        <argument ref="loggingMessagePublisher"/>
+        <argument ref="inMemorySignalRecordRepository"/>
+    </bean>
+</blueprint>
