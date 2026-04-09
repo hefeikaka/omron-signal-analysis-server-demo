@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <bean id="signalCollectionService" class="com.omron.oss.domain.signal.collection.SignalCollectionService"/>
+    <bean id="signalMessageFormatter" class="com.omron.oss.domain.signal.pipeline.SignalMessageFormatter"/>
+    <bean id="messagePublisher" class="com.omron.oss.integration.jms.LoggingMessagePublisher"/>
+    <bean id="signalRepository" class="com.omron.oss.integration.mongodb.InMemorySignalRecordRepository"/>
+    <bean id="signalPublishingService" class="com.omron.oss.domain.signal.pipeline.SignalPublishingService">
+        <argument ref="signalMessageFormatter"/>
+        <argument ref="messagePublisher"/>
+        <argument ref="signalRepository"/>
+    </bean>
+    <bean id="signalProcessingProperties" class="com.omron.oss.integration.config.SignalProcessingProperties">
+        <argument value="4"/>
+        <argument value="200"/>
+    </bean>
+    <bean id="signalProcessingExecutorFactory" class="com.omron.oss.integration.config.SignalProcessingExecutorFactory"/>
+    <bean id="signalProcessingExecutor" factory-ref="signalProcessingExecutorFactory" factory-method="create">
+        <argument ref="signalProcessingProperties"/>
+    </bean>
+    <bean id="signalProcessingExecutorManager" class="com.omron.oss.integration.config.SignalProcessingExecutorManager">
+        <argument ref="signalProcessingExecutor"/>
+    </bean>
+    <bean id="signalIngestFacade" class="com.omron.oss.domain.api.SignalIngestFacade">
+        <argument ref="signalCollectionService"/>
+        <argument ref="signalPublishingService"/>
+    </bean>
+    <bean id="signalRawPayloadParser" class="com.omron.oss.domain.api.SignalRawPayloadParser"/>
+    <bean id="signalRouteFacade" class="com.omron.oss.domain.api.SignalRouteFacade">
+        <argument ref="signalRawPayloadParser"/>
+        <argument ref="signalIngestFacade"/>
+    </bean>
+    <bean id="asyncSignalPublishingService" class="com.omron.oss.domain.signal.pipeline.AsyncSignalPublishingService">
+        <argument ref="signalPublishingService"/>
+        <argument ref="signalProcessingExecutor"/>
+    </bean>
+    <bean id="asyncSignalRouteFacade" class="com.omron.oss.domain.api.AsyncSignalRouteFacade">
+        <argument ref="signalRawPayloadParser"/>
+        <argument ref="signalCollectionService"/>
+        <argument ref="asyncSignalPublishingService"/>
+    </bean>
+</blueprint>
