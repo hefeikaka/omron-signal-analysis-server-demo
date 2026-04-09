@@ -1,0 +1,70 @@
+{
+    "url": "setting-file-purge-table",
+    "owner": "admin",
+    "name": "setting-file-purge-table",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [{
+            "id": "home",
+            "name": "Home",
+            "height": 1000,
+            "content": [{
+                "type": "column",
+                "isClosable": true,
+                "title": "",
+                "content": [{
+                        "type": "row",
+                        "isClosable": true,
+                        "title": "",
+                        "height": 70,
+                        "content": [{
+                            "type": "column",
+                            "isClosable": true,
+                            "title": "",
+                            "width": 100,
+                            "content": [{
+                                "type": "stack",
+                                "isClosable": true,
+                                "title": "",
+                                "content": [{
+                                    "title": "FilePurgeTableWidget",
+                                    "type": "component",
+                                    "component": "FilePurgeTableWidget",
+                                    "props": {
+                                        "id": "FilePurgeTableWidget",
+                                        "configs": {
+                                            "pubsub": {
+                                                "types": [
+                                                    "subscriber",
+                                                    "publisher"
+                                                ],
+                                                "publishers": []
+                                            },
+                                            "providerConfig": {},
+                                            "isGenerated": false,
+                                            "options": {}
+                                        },
+                                        "widgetID": "FilePurgeTableWidget"
+                                    },
+                                    "isClosable": false,
+                                    "header": {
+                                        "show": false
+                                    },
+                                    "componentName": "lm-react-component"
+                                }]
+                            }]
+                        }]
+                    }
+                    
+                ]
+            }]
+        }]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
