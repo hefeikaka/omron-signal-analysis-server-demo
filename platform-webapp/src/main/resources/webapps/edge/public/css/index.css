@@ -1,0 +1,309 @@
+.logo {
+	/* float: left; */
+	width: 130px;
+	height: auto;
+	/* margin: 16px 24px 16px 0; */
+
+	vertical-align: super;
+	background: rgba(0, 86, 213, 1);
+	display: inline-block;
+	align-items: center;
+	justify-content: center;
+}
+
+.logoImg {
+	width: 120px;
+	height: auto;
+}
+
+.app-menu-affix {
+	float: left;
+	position: absolute;
+	left: 0;
+	z-index: 999;
+}
+
+.ant-row-rtl .logo {
+	float: right;
+	margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+	background: rgba(255, 255, 255, 1);
+}
+
+
+/* 测试编写odoo类似样式 */
+.base-box-layout {
+	width: 100%;
+	height: 100%;
+	min-height: 500px;
+	padding: 100px;
+	background: url(../images/home-menu-bg-overlay.svg), linear-gradient(to right bottom, #fff, #fff);
+}
+
+.box-layout {
+	width: 800px;
+}
+
+.box-layout li {
+	height: 120px;
+	margin: 0 15px;
+	display: inline-block;
+	list-style: none;
+	cursor: pointer;
+	padding: 10px 20px;
+}
+
+.pageTitle {
+	width: 100%;
+	height: 50px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.appIcon {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+}
+
+.box-layout li>span {
+	border-radius: 15px;
+}
+
+.box-layout li>div {
+	line-height: 40px;
+	text-align: center;
+	font-size: 18px;
+}
+
+.box-layout li>span:hover {
+	transform: translateY(-5px);
+	transition: 0.5s;
+	box-shadow: 3px 2px 5px rgb(91, 91, 91);
+}
+
+.box-layout li>div:hover {
+	color: #888;
+	transition: 0.3s;
+}
+
+
+
+/* table改造相关css */
+.ant-table-row-color {
+	background-color: rgb(236, 246, 255);
+}
+
+.ant-table-row-color2 {
+	background-color: #fff;
+}
+
+.ant-table-row-color .ant-table-cell-fix-left,
+.ant-table-row-color .ant-table-cell-fix-right {
+	background-color: inherit;
+}
+
+.ant-table-thead>tr>th {
+	background: #fafafa;
+}
+
+/* 头像标题栏区域 */
+.right-header-box {
+	float: right;
+	vertical-align: top;
+}
+
+/* chart改造相关css */
+.bizchart {
+	padding: 5px 20px 5px 20px;
+}
+
+.bizchart .chart-title {
+	font-weight: bold;
+	text-align: center;
+	/* margin-bottom: 5px; */
+}
+
+.logo {
+	float: left;
+	width: 120px;
+	height: 31px;
+	margin: 16px 24px 16px 0;
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl .logo {
+	float: right;
+	margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+	background: #fff;
+}
+
+.ant-btn {
+	margin-right: 4px;
+}
+
+.ant-table-row-color {
+	background-color: rgb(236, 246, 255);
+}
+
+.ant-table-row-color2 {
+	background-color: #fff;
+}
+
+#ProductionOmenManagementTableWidget .ant-table.ant-table-small .ant-table-thead>tr>th {
+    padding: 2px 8px;
+}
+
+#RobotMaintenanceTableWidget .ant-table.ant-table-small .ant-table-thead>tr>th {
+    padding: 2px 8px;
+}
+
+#EnergyChartWidget .ant-pro-card .ant-pro-card-body {
+    padding-inline: 8px;
+    padding-block: 4px
+}
+
+#EnergyChartWidget .ant-pro-card .ant-pro-card-header-border {
+    padding: 0px;
+}
+
+#ShaftQualityRateChartWidget .ant-pro-card .ant-pro-card-header-border {
+    padding: 0px;
+}
+
+#ProductionManagementBaseInfoWidget .ant-pro-card .ant-pro-card-header {
+    padding-inline: 8px;
+}
+
+#QualityRateWidget .ant-pro-card .ant-pro-card-header {
+    padding-inline: 8px;
+}
+
+#QualityRateWidget .ant-progress-inner {
+    width: 150px !important;
+    height: 150px !important;
+    font-size: 16px !important;
+}
+
+#ProductionManagementTargetStateWidget .ant-pro-card .ant-pro-card-header {
+    padding-inline: 8px;
+}
+
+#ProductionManagementTargetStateWidget .ant-progress-outer {
+    width: 90%;
+}
+
+#PPKWidget .ant-pro-card .ant-pro-card-header {
+    padding-inline: 8px;
+}
+
+#QualityDisposeManagementReportAlarmMessageWidget .ant-pro-card .ant-pro-card-body {
+	padding-block: 4px;
+}
+#QualityDisposeManagementReportHistoryMessageWidget .ant-pro-card .ant-pro-card-body {
+	padding-block: 4px;
+}
+
+
+
+#check-protable .ant-pro .ant-pro-query-filter {
+    padding: 5px 5px;
+}
+
+#check-protable .ant-pro-table-list-toolbar-container {
+    display: flex;
+    justify-content: space-between;
+    padding-block: 5px;
+    padding-inline: 0;
+}
+
+
+#check-protable .ant-pro .ant-pro-query-filter-row {
+    row-gap: 5px;
+}
+
+
+#modelCheckImportWidget .ant-pro-card-body {
+    padding-inline: 0;
+}
+
+
+#check-protable .ant-pro-table .ant-pro-table-search {
+    margin-block-end: 5px;
+    background: #ffffff;
+    padding: 0px;
+}
+
+
+#check-prodescription .ant-form-item {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+#check-prodescription .ant-descriptions-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#check-prodescription .ant-pro-card .ant-pro-card-body {
+    display: block;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0;
+}
+
+#check-prodescription .ant-btn .ant-btn-dashedelement .style {
+    display: block;
+    margin: 10px 0px 0px 0px;
+    width: 100%;
+}
+
+#check-prodescription .ant-pro-form-group-title {
+    margin-block-end: 10px;
+    font-weight: bold;
+}
+
+#check-prodescription .ant-pro-card-border{
+    border: 0px solid rgba(5, 5, 5, 0.06);
+}
+
+#check-protable .ant-pro-query-filter {
+    padding: 5px 5px;
+}
+
+#check-protable .ant-form-item{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    vertical-align: top;
+}
+
+#proform-prodescription-formitem .ant-form-item {
+    margin-bottom: 0px;
+}
+
+#proform-prodescription-formitem .ant-descriptions-item-content {
+    padding: 12px 16px;
+}
+
+/* #omron-form-style{
+	width: 850px;
+	text-align: center;
+}
+
+#machine-location-prodescription form>div:last-of-type{
+	width: 640px;
+	text-align: center;
+} */
