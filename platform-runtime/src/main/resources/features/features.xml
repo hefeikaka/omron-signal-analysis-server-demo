@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="open-omron-signal-runtime">
+    <feature name="open-omron-signal-runtime" version="1.0.0.SNAPSHOT">
+        <bundle>mvn:com.omron.oss/platform-config/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/platform-integration/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/platform-webapp/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-common/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-signal-collection/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-signal-pipeline/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-signal-storage/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-signal-analysis/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-index/1.0.0-SNAPSHOT</bundle>
+        <bundle>mvn:com.omron.oss/domain-api/1.0.0-SNAPSHOT</bundle>
+    </feature>
+</features>
