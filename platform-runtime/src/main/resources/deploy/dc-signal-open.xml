@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <!--
+      Open replacement mapping for the packaged dc-signal.xml main route:
+      raw source -> parse JSON -> collect signal -> normalize payload -> publish sourceSiganlCurve
+    -->
+    <reference id="signalRouteFacade" interface="com.omron.oss.domain.api.SignalRouteFacade"/>
+</blueprint>
