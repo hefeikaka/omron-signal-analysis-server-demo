@@ -1,0 +1,181 @@
+{
+    "url": "machine-index-realtime",
+    "owner": "admin",
+    "name": "machine-index-realtime",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [
+            {
+                "id": "home",
+                "name": "Home",
+                "height": 1000,
+                "content": [
+                    {
+                        "type": "column",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 70,
+                                "content": [
+                                    {
+                                        "type": "column",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "width": 100,
+                                        "content": [
+                                            {
+                                                "type": "stack",
+                                                "isClosable": true,
+                                                "title": "",
+                                                "content": [
+                                                    {
+                                                        "title": "LocationAnalysisSearchWidget",
+                                                        "type": "component",
+                                                        "component": "LocationAnalysisSearchWidget",
+                                                        "props": {
+                                                            "id": "LocationAnalysisSearchWidget",
+                                                            "configs": {
+                                                                "pubsub": {
+                                                                    "types": [
+                                                                        "subscriber",
+                                                                        "publisher"
+                                                                    ],
+                                                                    "publishers": []
+                                                                },
+                                                                "providerConfig": {},
+                                                                "isGenerated": false,
+                                                                "options": {}
+                                                            },
+                                                            "widgetID": "LocationAnalysisSearchWidget"
+                                                        },
+                                                        "isClosable": false,
+                                                        "header": {
+                                                            "show": false
+                                                        },
+                                                        "componentName": "lm-react-component"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 70,
+                                "content": [
+                                    {
+                                        "type": "column",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "width": 100,
+                                        "content": [
+                                            {
+                                                "type": "stack",
+                                                "isClosable": true,
+                                                "title": "",
+                                                "content": [
+                                                    {
+                                                        "title": "MachineIndexHistoryTableWidget",
+                                                        "type": "component",
+                                                        "component": "MachineIndexHistoryTableWidget",
+                                                        "props": {
+                                                            "id": "MachineIndexHistoryTableWidget",
+                                                            "configs": {
+                                                                "pubsub": {
+                                                                    "types": [
+                                                                        "subscriber",
+                                                                        "publisher"
+                                                                    ],
+                                                                    "publishers": [
+                                                                        "LocationAnalysisSearchWidget"
+                                                                    ]
+                                                                },
+                                                                "providerConfig": {
+                                                                    "configs": {}
+                                                                },
+                                                                "isGenerated": false,
+                                                                "options": {}
+                                                            },
+                                                            "widgetID": "MachineIndexHistoryTableWidget"
+                                                        },
+                                                        "isClosable": false,
+                                                        "header": {
+                                                            "show": false
+                                                        },
+                                                        "componentName": "lm-react-component"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 70,
+                                "content": [
+                                    {
+                                        "type": "column",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "width": 100,
+                                        "content": [
+                                            {
+                                                "type": "stack",
+                                                "isClosable": true,
+                                                "title": "",
+                                                "content": [
+                                                    {
+                                                        "title": "InformationWidget",
+                                                        "type": "component",
+                                                        "component": "InformationWidget",
+                                                        "props": {
+                                                            "id": "InformationWidget",
+                                                            "configs": {
+                                                                "providerConfig": {
+                                                                    "configs": {}
+                                                                },
+                                                                "isGenerated": false,
+                                                                "options": {},
+                                                                "content": {
+                                                                    "title": "指标历史列表",
+                                                                    "description": "设备运行过程中的各种指标历史数据。"
+                                                                }
+                                                            },
+                                                            "widgetID": "InformationWidget"
+                                                        },
+                                                        "isClosable": false,
+                                                        "header": {
+                                                            "show": false
+                                                        },
+                                                        "componentName": "lm-react-component"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
