@@ -1,0 +1,79 @@
+{
+    "url": "energy-data",
+    "owner": "admin",
+    "name": "energy-data",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [
+            {
+                "id": "home",
+                "name": "Home",
+                "height": 940,
+                "content": [
+                    {
+                        "type": "column",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 100,
+                                "content": [
+                                    {
+                                        "type": "stack",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "width": 50,
+                                        "content": [
+                                            {
+                                                "title": "RealtimeTrendsWidget",
+                                                "type": "component",
+                                                "component": "RealtimeTrendsWidget",
+                                                "props": {
+                                                    "id": "RealtimeTrendsWidget",
+                                                    "configs": {
+                                                        "pubsub": {
+                                                            "types": []
+                                                        },
+                                                        "isGenerated": false,
+                                                        "providerConfig": {
+                                                            "configs": {
+                                                                "type": "SiddhiDataProvider",
+                                                                "config": {
+                                                                    "siddhiApp":"%40App%3Aname('RealtimeTrendsWidget')%0A%0A%40App%3Adescription(%22%E5%8E%9F%E5%9B%BE%22)%0A%0A%0A%0A%40sink(type%3D'log'%2Cpriority%3D'DEBUG')%0A%40source(type%3D'inMemory'%2Ctopic%3D'signal-index-ws')%0Adefine%20stream%20inputStream(subjectCode%20string%2C%20subjectType%20string%2Cfactor%20string%2Ctype%20string%2C%0AindexValue%20double%2CcalculationType%20string%2Ctime%20string%2C%20x1%20string%2C%20y1%20string%2C%20sequenceNumber%20string)%3B%0A%0A%0A%40sink(type%3D'log'%2Cpriority%3D'INFO'%2C%40map(type%3D'json'))%0A%40sink(type%3D'inMemory'%2C%20topic%3D'payload-sink-to-ws'%2C%40map(type%3D'json'%2C%20validate.json%3D'true'%2C%20%40payload(%22%22%22%7B%0A%22topic%22%3A%22RealtimeTrendsWidget%22%2C%22data%22%3A%7B%22subjectCode%22%3A%22%7B%7BsubjectCode%7D%7D%22%2C%22subjectType%22%3A%22%7B%7BsubjectType%7D%7D%22%2C%22factor%22%3A%22%7B%7Bfactor%7D%7D%22%2C%20%22type%22%3A%22%7B%7Btype%7D%7D%22%2C%22indexValue%22%3A%22%7B%7BindexValue%7D%7D%22%2C%22calculationType%22%3A%22%7B%7BcalculationType%7D%7D%22%2C%20%22time%22%3A%22%7B%7Btime%7D%7D%22%2C%20%22x1%22%3A%22%7B%7Bx1%7D%7D%22%2C%20%22y1%22%3A%22%7B%7By1%7D%7D%22%2C%20%22sequenceNumber%22%3A%22%7B%7BsequenceNumber%7D%7D%22%20%7D%0A%7D%22%22%22)))%0Adefine%20stream%20outputStream(subjectCode%20string%2C%20subjectType%20string%2Cfactor%20string%2Ctype%20string%2C%0AindexValue%20double%2CcalculationType%20string%2Ctime%20string%2C%20x1%20string%2C%20y1%20string%2C%20sequenceNumber%20string)%3B%0A%0A%0Afrom%20inputStream%0Aselect%20subjectCode%2C%20subjectType%2Cfactor%2Ctype%2C%0AindexValue%2CcalculationType%2Ctime%20%2Cx1%20%2C%20y1%2C%20sequenceNumber%0Agroup%20by%20subjectCode%2C%20subjectType%2Cfactor%2Ctype%0Aoutput%20last%20every%201000%20millisec%0Ainsert%20into%20outputStream%3B%0A%0A",
+                                                                    "mapType": "json",
+                                                                    "topic": "RealtimeTrendsWidget"
+                                                                }
+                                                            }
+                                                        },
+                                                        "options": {}
+                                                    },
+                                                    "widgetID": "RealtimeTrendsWidget"
+                                                },
+                                                "isClosable": false,
+                                                "header": {
+                                                    "show": false
+                                                },
+                                                "componentName": "lm-react-component"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false,
+    "message": "success"
+}
