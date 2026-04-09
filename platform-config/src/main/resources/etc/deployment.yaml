@@ -1,0 +1,95 @@
+omron.application:
+  appconfigs:
+    - name: "ROOT"
+      sp: "ROOT"
+      clientId: "replace-me-root-client"
+      ip: "http://${karaf.host}:9730/api"
+    - name: "edge"
+      sp: "edge"
+      clientId: "replace-me-edge-client"
+      ip: "http://${karaf.host}:9730/api"
+
+refs:
+  - ref:
+      name: "sourceSiganlCurve"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "sourceSiganlCurve"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+  - ref:
+      name: "machine_curve_to_mq"
+      type: "store"
+      properties:
+        storage.mode: "JMS"
+        destination: "machine_curve.save"
+  - ref:
+      name: "rawdata_signal_curve"
+      type: "store"
+      properties:
+        storage.mode: "LOCAL"
+        model.name: "rawdata_signal_curve"
+  - ref:
+      name: "sigfft-etl"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "sigfft_etl"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+  - ref:
+      name: "sigsta-etl"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "sigsta_etl"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+  - ref:
+      name: "envspectrum-etl"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "envspectrum_etl"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+  - ref:
+      name: "bff-etl"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "bff_etl"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+  - ref:
+      name: "signal-ws-etl"
+      type: "jms"
+      properties:
+        factory.initial: "camel.jms.consumer"
+        provider.url: "${karaf.messaging.jms.providerUrl}"
+        destination: "signal_ws_etl"
+        connection.factory.type: "topic"
+        connection.factory.jndi.name: "TopicConnectionFactory"
+
+signal:
+  processing:
+    workerThreads: 4
+    queueCapacity: 200
+
+karaf:
+  mongodb:
+    ip: "127.0.0.1"
+    port: 27017
+    database: "DB_SingalAys"
+  indexing:
+    url: "http://127.0.0.1:9200"
+    prefix: "signal-analysis-"
+  messaging:
+    jms:
+      providerUrl: "tcp://127.0.0.1:61616"
