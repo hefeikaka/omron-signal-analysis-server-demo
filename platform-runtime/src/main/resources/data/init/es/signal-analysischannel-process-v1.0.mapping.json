@@ -1,0 +1,26 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "machineId": {
+        "type": "keyword"
+      },
+      "collectedAt": {
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "samplingFrequency": {
+        "type": "integer"
+      },
+      "values": {
+        "type": "float"
+      },
+      "formattedAt": {
+        "type": "keyword"
+      }
+    }
+  }
+}
