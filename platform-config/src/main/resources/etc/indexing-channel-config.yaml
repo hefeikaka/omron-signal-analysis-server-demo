@@ -1,0 +1,9 @@
+indexing.config:
+  configs:
+    - name: 'channel-process'
+      url: ${karaf.indexing.url}
+      path: /signal-analysischannel-process-v1.0/doc
+      search: /_search
+      indexName: signal-analysischannel-process-v1.0
+      type: doc
+      refresh: 'false'
