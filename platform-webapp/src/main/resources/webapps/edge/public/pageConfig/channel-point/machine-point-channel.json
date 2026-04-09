@@ -1,0 +1,74 @@
+{
+    "url": "machine-point-setting-channel",
+    "owner": "admin",
+    "name": "machine-point-setting-channel",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [{
+            "id": "home",
+            "name": "Home",
+            "height": 600,
+            "content": [{
+                "type": "column",
+                "isClosable": true,
+                "title": "",
+                "content": [{
+                    "type": "row",
+                    "isClosable": true,
+                    "title": "",
+                    "height": 480,
+                    "content": [{
+                        "type": "stack",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [{
+                            "title": "SubjectAccessoryChannelTableWidget",
+                            "type": "component",
+                            "component": "SubjectAccessoryChannelTableWidget",
+                            "props": {
+                                "id": "SubjectAccessoryChannelTableWidget",
+                                "insertUrl": "/index/point-setting/channel/batchAdd/monitor",
+                                "subjectType": "machine",
+                                "subjectTypeName": "设备",
+                                "machineParentId": 0,
+                                "channelThredholdUrl":"/index/point-setting/channel/threshold",
+                                "anomalyDetectionChannelAddUrl": "/index/point-setting/channel/add",
+                                "anomalyDetectionChannelDetailUrl": "/index/point-setting/channel/detail",
+                                "anomalyDetectionChannelEditUrl": "/index/point-setting/channel/edit",
+                                "batchAddReturnUrl":"/index/point-setting/channel",
+                                "alarmHistoryUrl":"/index/alarm-history",
+                                "controlTypeOptions": [{
+                                    "label": "设备",
+                                    "value": "machine"
+                                }],
+                                "configs": {
+                                    "pubsub": {
+                                        "types": []
+                                    },
+                                    "isGenerated": false,
+                                    "options": {}
+                                },
+                                "params": {
+                                    "type": "denso-electrical-machinery"
+                                },
+                                "widgetID": "SubjectAccessoryChannelTableWidget"
+                            },
+                            "isClosable": false,
+                            "header": {
+                                "show": false
+                            },
+                            "componentName": "lm-react-component"
+                        }]
+                    }]
+                }]
+            }]
+        }]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
