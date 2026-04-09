@@ -1,0 +1,24 @@
+#omron-search-table {
+  padding:5px 5px;
+}
+#omron-search-table .ant-pro-query-filter {
+  padding: 5px 5px;
+}
+
+#omron-search-table .ant-pro-card .ant-pro-card-body {
+  padding-inline: 5px;
+  padding-block: 1px;
+}
+
+#omron-search-table .ant-table-thead .ant-table-cell {
+  font-weight: bold;
+}
+
+#omron-search-table .ant-pro-table-search {
+  margin-block-end: 5px;
+}
+
+#omron-search-table .ant-pro-table-list-toolbar-container {
+  padding-block: 5px;
+}
+
