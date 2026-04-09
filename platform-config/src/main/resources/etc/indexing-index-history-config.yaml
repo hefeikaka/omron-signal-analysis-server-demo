@@ -1,0 +1,58 @@
+indexing.config:
+  configs:
+    - name: 'index-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisindex-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisindex-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'alarm-suppress-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisalarm-suppress-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisalarm-suppress-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'status-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisstatus-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisstatus-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'status-stat-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisstatus-stat-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisstatus-stat-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'index-stat-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisindex-stat-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisindex-stat-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'alarm-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisalarm-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisalarm-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'status-suppress-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisstatus-suppress-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisstatus-suppress-history-v1.0
+      type: doc
+      refresh: 'false'
+    - name: 'alarm-stat-history'
+      url: ${karaf.indexing.url}
+      path: /signal-analysisalarm-stat-history-v1.0/doc
+      search: /_search
+      indexName: signal-analysisalarm-stat-history-v1.0
+      type: doc
+      refresh: 'false'
