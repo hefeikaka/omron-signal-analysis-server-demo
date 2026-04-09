@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DEMO Signal Direct Acquisition</title>
+  <style>
+    :root{--bg:#eef5ff;--panel:#fff;--primary:#0b5bd3;--panel-dark:#123b69;--text:#17324d;--muted:#5f7895;--border:#d7e4f2;--success:#027a48;--danger:#b42318;--warn:#b54708;--shadow:0 16px 36px rgba(18,59,105,.10);--radius:22px;--font:"Microsoft YaHei","Segoe UI",sans-serif}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);color:var(--text);background:radial-gradient(circle at top left,rgba(11,91,211,.10),transparent 28%),linear-gradient(135deg,#edf4ff 0%,#f7fbff 48%,#fff 100%)}
+    .page{max-width:1520px;margin:0 auto;min-height:100vh;padding:28px 24px 40px}
+    .header,.toolbar,.metrics,.layout,.left-column,.right-column,.tab-row,.form-grid,.inline-grid,.chart-grid,.metric-strip{display:grid;gap:16px}
+    .header{grid-template-columns:1fr auto;align-items:center;margin-bottom:24px}
+    .toolbar{grid-auto-flow:column;grid-auto-columns:max-content;justify-content:end;align-items:center}
+    .metrics{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:24px}
+    .layout{grid-template-columns:360px minmax(0,1fr);align-items:start}
+    .left-column{transition:all .28s ease}
+    .badge{display:inline-block;color:#567a9f;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+    h1{margin:0 0 8px;font-size:38px;line-height:1.15;color:#123b69}
+    .subtitle,.panel-text,.hint{color:var(--muted);line-height:1.8;font-size:14px}
+    .button,.link-button,input,select{border-radius:12px;font-size:14px}
+    .button,.link-button{border:0;padding:11px 16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .button.primary{background:var(--primary);color:#fff}
+    .button.secondary{background:#123b69;color:#fff}
+    .button.ghost,.link-button.ghost{background:#edf4ff;color:#123b69}
+    .link-button.dark{background:#1d2939;color:#fff}
+    .card,.panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    .metric-label{color:var(--muted);font-size:13px}
+    .metric-value{margin-top:10px;font-size:24px;font-weight:700;color:#123b69}
+    .metric-value.small{font-size:18px;line-height:1.35}
+    .metric-detail{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.5;white-space:pre-line}
+    .panel-title,.chart-card-title{margin:0 0 10px;font-size:22px;font-weight:700;color:#123b69}
+    .chart-card-title{font-size:18px}
+    .status{margin-top:12px;padding:12px 14px;border-radius:12px;font-weight:700}
+    .status.connected{background:#ecfdf3;color:var(--success)}
+    .status.waiting{background:#fff7ed;color:var(--warn)}
+    .status.error{background:#fff2f0;color:var(--danger)}
+    .panel.stack-card{transition:transform .30s ease,opacity .30s ease,filter .30s ease,box-shadow .30s ease,border-color .30s ease;border:1px solid transparent}
+    .panel.stack-card.inactive{opacity:.52;filter:grayscale(.25);transform:translateY(24px) scale(.985);box-shadow:0 8px 18px rgba(18,59,105,.08)}
+    .panel.stack-card.active{transform:translateY(0) scale(1);border-color:#bfd4ef;box-shadow:0 20px 42px rgba(18,59,105,.16)}
+    .left-column.view-waveform [data-panel-role="settings"]{order:1}
+    .left-column.view-waveform [data-panel-role="realtime-selection"]{order:2}
+    .left-column.view-waveform [data-panel-role="trend-selection"]{order:3}
+    .left-column.view-featureRealtime [data-panel-role="realtime-selection"]{order:1}
+    .left-column.view-featureRealtime [data-panel-role="settings"]{order:2}
+    .left-column.view-featureRealtime [data-panel-role="trend-selection"]{order:3}
+    .left-column.view-featureTrend [data-panel-role="trend-selection"]{order:1}
+    .left-column.view-featureTrend [data-panel-role="settings"]{order:2}
+    .left-column.view-featureTrend [data-panel-role="realtime-selection"]{order:3}
+    .form-row{display:grid;gap:8px}
+    label{font-size:13px;color:var(--muted);font-weight:700}
+    input,select{border:1px solid var(--border);padding:10px 12px;width:100%;font-family:inherit;color:var(--text);background:#fdfefe}
+    input[readonly]{background:#f3f6fa;color:#7a8ea6;cursor:not-allowed}
+    select[multiple]{min-height:160px}
+    .inline-grid,.metric-strip{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+    .flash-message{min-height:20px;font-size:13px;font-weight:700}
+    .flash-message.success{color:var(--success)}
+    .flash-message.error{color:var(--danger)}
+    .tab-row{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:18px}
+    .tab-button{border:1px solid var(--border);background:#f6faff;color:#27496d;border-radius:14px;padding:14px 16px;text-align:center;font-weight:700;cursor:pointer;transition:all .22s ease}
+    .tab-button.active{background:#123b69;color:#fff;border-color:#123b69;transform:translateY(-1px)}
+    .view-panel{display:none;gap:16px;opacity:0;transform:translateY(10px)}
+    .view-panel.active{display:grid;animation:viewIn .28s ease forwards}
+    .chart-shell{background:linear-gradient(180deg,#f9fbff 0%,#f1f7ff 100%);border:1px solid var(--border);border-radius:18px;padding:16px}
+    .chart-svg{width:100%;height:320px;display:block}
+    .chart-grid{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+    .chart-card{position:relative;border:1px solid var(--border);border-radius:18px;padding:16px;background:#fff}
+    .chart-card-subtitle{color:var(--muted);font-size:13px;margin-bottom:10px}
+    .chart-card-expand{position:absolute;right:22px;bottom:22px;width:42px;height:42px;border:0;border-radius:999px;background:rgba(18,59,105,.08);color:#123b69;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.06;transform:scale(.94);transition:opacity .22s ease,background .22s ease,transform .22s ease,box-shadow .22s ease;box-shadow:0 8px 18px rgba(18,59,105,.08)}
+    .chart-card:hover .chart-card-expand,.chart-card-expand:focus-visible{opacity:.92;transform:scale(1);background:rgba(18,59,105,.18);box-shadow:0 12px 22px rgba(18,59,105,.16);outline:none}
+    .chart-card-expand span{font-size:18px;font-weight:700;line-height:1}
+    .chart-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:26px;background:rgba(9,25,44,.77);opacity:0;pointer-events:none;transition:opacity .26s ease;z-index:9999}
+    .chart-overlay.active{opacity:1;pointer-events:auto}
+    .chart-overlay-panel{position:relative;width:min(1320px,96vw);max-height:92vh;overflow:auto;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-radius:24px;box-shadow:0 22px 52px rgba(5,20,37,.26);padding:26px 26px 30px}
+    .chart-overlay-header{padding-right:64px;margin-bottom:14px}
+    .chart-overlay-title{margin:0 0 8px;font-size:28px;font-weight:700;color:#123b69}
+    .chart-overlay-subtitle{color:var(--muted);font-size:14px}
+    .chart-overlay .chart-shell{padding:20px;border-radius:22px}
+    .chart-overlay .chart-svg{height:min(72vh,760px)}
+    .chart-overlay-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border:0;border-radius:999px;background:rgba(18,59,105,.10);color:#123b69;font-size:22px;font-weight:700;cursor:pointer;transition:background .22s ease,transform .22s ease}
+    .chart-overlay-close:hover,.chart-overlay-close:focus-visible{background:rgba(18,59,105,.18);transform:scale(1.04);outline:none}
+    .feature-metric{padding:14px;border:1px solid var(--border);border-radius:16px;background:#f8fbff}
+    .feature-metric-label{color:var(--muted);font-size:12px}
+    .feature-metric-value{margin-top:8px;font-size:22px;font-weight:700;color:#123b69}
+    .table-shell{overflow:auto;border:1px solid var(--border);border-radius:18px}
+    table{width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+    th,td{padding:12px 14px;border-bottom:1px solid #edf2f8;text-align:left;white-space:nowrap}
+    th{background:#f8fbff;color:#27496d;font-weight:700;position:sticky;top:0}
+    .chart-empty{color:var(--muted);font-size:14px;padding:16px 0}
+    .refresh-note{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef5ff;color:#355779;font-size:12px;font-weight:700}
+    @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @media (max-width:1120px){.layout,.header{grid-template-columns:1fr}.toolbar{justify-content:start;grid-auto-flow:row}.tab-row{grid-template-columns:1fr}}
+    @media (max-width:720px){.page{padding:20px 14px 32px}h1{font-size:30px}.button,.link-button{width:100%}.chart-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div>
+        <div id="badge" class="badge"></div>
+        <h1 id="title"></h1>
+        <div id="subtitle" class="subtitle"></div>
+      </div>
+      <div class="toolbar">
+        <button id="lang-toggle" class="button secondary"></button>
+        <button id="refresh-button" class="button primary"></button>
+        <button id="logout-button" type="button" class="button secondary"></button>
+      </div>
+    </div>
+    <div class="metrics">
+      <div class="card"><div id="metric-source-label" class="metric-label"></div><div id="metric-source-value" class="metric-value"></div></div>
+      <div class="card"><div id="metric-mode-label" class="metric-label"></div><div id="metric-mode-value" class="metric-value"></div></div>
+      <div class="card"><div id="metric-api-label" class="metric-label"></div><div id="metric-api-value" class="metric-value"></div></div>
+      <div class="card"><div id="metric-history-label" class="metric-label"></div><div id="metric-history-value" class="metric-value">0</div></div>
+      <div class="card"><div id="metric-status-label" class="metric-label"></div><div id="metric-status-value" class="metric-value small"></div><div id="metric-status-detail" class="metric-detail"></div></div>
+    </div>
+    <div class="layout">
+      <div class="left-column">
+        <div class="panel stack-card" data-panel-role="settings">
+          <div id="settings-title" class="panel-title"></div>
+          <div id="settings-text" class="panel-text"></div>
+          <form id="settings-form" class="form-grid" style="margin-top:14px;">
+            <div class="form-row"><label><input id="enabled-input" type="checkbox"><span id="enabled-label"></span></label></div>
+            <div class="form-row"><label for="samplingFrequency" id="sampling-frequency-label"></label><input id="samplingFrequency" type="number" readonly></div>
+            <div class="form-row"><label for="acquisitionDurationMillis" id="duration-label"></label><input id="acquisitionDurationMillis" type="number" min="100"></div>
+            <div class="form-row"><label for="acquisitionIntervalMillis" id="interval-label"></label><input id="acquisitionIntervalMillis" type="number" min="1000" step="1000"></div>
+            <div id="sample-count-hint" class="hint"></div>
+            <div id="save-message" class="flash-message"></div>
+            <button id="save-button" type="submit" class="button primary"></button>
+          </form>
+        </div>
+        <div class="panel stack-card" data-panel-role="realtime-selection">
+          <div id="realtime-selection-title" class="panel-title"></div>
+          <div id="realtime-selection-text" class="panel-text"></div>
+          <div class="form-grid" style="margin-top:14px;">
+            <div class="form-row"><label for="featureRealtimeKeys" id="feature-realtime-key-label"></label><select id="featureRealtimeKeys" multiple></select></div>
+            <div class="form-row"><label for="featureRealtimeRange" id="feature-realtime-range-label"></label><select id="featureRealtimeRange"></select></div>
+          </div>
+        </div>
+        <div class="panel stack-card" data-panel-role="trend-selection">
+          <div id="trend-selection-title" class="panel-title"></div>
+          <div id="trend-selection-text" class="panel-text"></div>
+          <div class="form-grid" style="margin-top:14px;">
+            <div class="form-row"><label for="featureTrendKeys" id="feature-trend-key-label"></label><select id="featureTrendKeys" multiple></select></div>
+            <div class="form-row"><label for="featureTrendRange" id="feature-trend-range-label"></label><select id="featureTrendRange"></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="right-column">
+        <div class="panel">
+          <div class="tab-row">
+            <button id="tab-waveform" class="tab-button active" type="button"></button>
+            <button id="tab-feature-realtime" class="tab-button" type="button"></button>
+            <button id="tab-feature-trend" class="tab-button" type="button"></button>
+          </div>
+          <div id="view-waveform" class="view-panel active">
+            <div id="chart-title" class="panel-title"></div>
+            <div id="chart-text" class="panel-text"></div>
+            <div class="chart-shell"><svg id="chart-svg" class="chart-svg" viewBox="0 0 1000 320" preserveAspectRatio="none"></svg></div>
+            <div id="table-title" class="panel-title"></div>
+            <div class="table-shell"><table><thead><tr><th id="col-time"></th><th id="col-machine"></th><th id="col-points"></th><th id="col-freq"></th><th id="col-latest"></th><th id="col-min"></th><th id="col-max"></th></tr></thead><tbody id="history-body"></tbody></table></div>
+          </div>
+          <div id="view-feature-realtime" class="view-panel">
+            <div id="feature-realtime-title" class="panel-title"></div>
+            <div id="feature-realtime-text" class="panel-text"></div>
+            <div class="metric-strip" style="margin-top:14px;">
+              <div class="feature-metric"><div id="feature-realtime-current-label" class="feature-metric-label"></div><div id="feature-realtime-current-value" class="feature-metric-value">0.0000</div></div>
+              <div class="feature-metric"><div id="feature-realtime-points-label" class="feature-metric-label"></div><div id="feature-realtime-points-value" class="feature-metric-value">0</div></div>
+            </div>
+            <div id="feature-realtime-refresh-note" class="refresh-note"></div>
+            <div id="feature-realtime-grid" class="chart-grid"></div>
+          </div>
+          <div id="view-feature-trend" class="view-panel">
+            <div id="feature-trend-title" class="panel-title"></div>
+            <div id="feature-trend-text" class="panel-text"></div>
+            <div id="feature-trend-refresh-note" class="refresh-note"></div>
+            <div id="feature-trend-grid" class="chart-grid" style="margin-top:14px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="chart-overlay" class="chart-overlay" aria-hidden="true">
+    <div class="chart-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="chart-overlay-title">
+      <button id="chart-overlay-close" class="chart-overlay-close" type="button" aria-label="Close">×</button>
+      <div class="chart-overlay-header">
+        <div id="chart-overlay-title" class="chart-overlay-title"></div>
+        <div id="chart-overlay-subtitle" class="chart-overlay-subtitle"></div>
+      </div>
+      <div class="chart-shell">
+        <svg id="chart-overlay-svg" class="chart-svg" viewBox="0 0 1000 320" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var REFRESH_MS = 15000;
+      var translations = {
+        zh: {badge:"DEMO版直采",title:"信号分析 DEMO 直采工作台",subtitle:"DEMO 版已经直接接管采集卡。右侧可在实时折线图、实时特征、历史趋势之间切换。",switchLabel:"English",refresh:"刷新状态",logout:"退出登录",source:"直采端口",sourceValue:"TCP 8234 / 以太网 2",module:"当前模式",moduleValue:"DEMO 版直采接管",api:"状态接口",apiValue:"/api/acquisition/status",records:"历史记录数",metricStatus:"实时状态",settingsTitle:"采集设置",settingsText:"采集频率由采集卡返回，只读展示。你可以调整采集时长和采集间隔，非采集窗口内的数据不会处理。",enabled:"启用直采",samplingFrequency:"当前采集频率 (Hz)",duration:"采集时长 (ms)",interval:"采集间隔 (ms)",sampleCount:"自动换算点数",sampleRuleTemplate:"当前每次采集 {duration}，每 {interval} 采集一次。非采集窗口内的数据不会处理。",save:"保存设置",saveSaving:"保存中...",saveSuccess:"采集设置已保存。",saveFailed:"保存采集设置失败",connected:"采集卡已连接，DEMO 版正在直接读取实时数据。",waiting:"正在等待采集卡连接到 DEMO 运行时。",errorPrefix:"当前状态",errorNone:"无",lastCollectedAt:"最近采集时间",editingPaused:"正在编辑，自动刷新已临时暂停。",realtimeSelectionTitle:"实时特征选择",realtimeSelectionText:"配置实时特征的特征项和时间范围。支持多选，每个特征会单独生成一张带 X/Y 坐标的折线图。",trendSelectionTitle:"历史趋势选择",trendSelectionText:"配置历史趋势的特征项和时间范围。支持多选，每个特征会单独生成一张带 X/Y 坐标的折线图。",waveformTab:"实时折线图",realtimeTab:"实时特征",trendTab:"历史趋势",chartTitle:"最新波形折线图",chartText:"显示最近一次直采得到的完整波形，并保留下方最近采集记录表格。",tableTitle:"最近采集记录",featureRealtimeTitle:"特征实时",featureRealtimeText:"这里显示已经落库的特征值，允许一定滞后。你可以查看最近 1 小时、2 小时、1 天、2 天等范围。",featureRealtimeKey:"实时特征项",featureRealtimeRange:"实时范围",featureRealtimeCurrent:"最近值",featureRealtimePoints:"总点数",featureRealtimeRefreshNote:"自动刷新：每 15 秒更新一次",featureTrendTitle:"历史趋势",featureTrendText:"按选择的特征项和时间段，从 MySQL 历史记录中绘制趋势折线图。",featureTrendKey:"趋势特征项",featureTrendRange:"趋势时间段",featureTrendRefreshNote:"历史趋势不自动刷新。切换特征、时间范围或点击刷新按钮时更新。",xAxis:"X 轴: 时间",yAxis:"Y 轴: 特征值",noFeatureData:"当前范围没有该特征数据。",noData:"当前还没有直采结果。请确认 RC2 已停止，并由 DEMO 版接管 8234 端口。",colTime:"采集时间",colMachine:"设备",colPoints:"点数",colFreq:"频率",colLatest:"最新值",colMin:"最小值",colMax:"最大值"},
+        en: {badge:"DEMO Direct Acquisition",title:"Signal Analysis DEMO Direct Acquisition Workbench",subtitle:"The DEMO runtime directly controls the acquisition card. Switch the right side between realtime waveform, realtime features, and history trend.",switchLabel:"中文",refresh:"Refresh Status",logout:"Sign Out",source:"Direct Port",sourceValue:"TCP 8234 / Ethernet 2",module:"Current Mode",moduleValue:"DEMO Direct Takeover",api:"Status API",apiValue:"/api/acquisition/status",records:"History Count",metricStatus:"Realtime Status",settingsTitle:"Acquisition Settings",settingsText:"Sampling frequency comes from the card and is shown as read-only. You can adjust duration and interval, and data outside the acquisition window is skipped.",enabled:"Enable Direct Acquisition",samplingFrequency:"Current Sampling Frequency (Hz)",duration:"Acquisition Duration (ms)",interval:"Acquisition Interval (ms)",sampleCount:"Calculated Points",sampleRuleTemplate:"Current acquisition collects for {duration} every {interval}. Data outside the acquisition window is skipped.",save:"Save Settings",saveSaving:"Saving...",saveSuccess:"Acquisition settings have been saved.",saveFailed:"Failed to save acquisition settings",connected:"The acquisition card is connected and the DEMO runtime is reading realtime data directly.",waiting:"Waiting for the acquisition card to connect to the DEMO runtime.",errorPrefix:"Current Status",errorNone:"None",lastCollectedAt:"Last Collected At",editingPaused:"Editing in progress. Auto refresh is temporarily paused.",realtimeSelectionTitle:"Realtime Feature Selection",realtimeSelectionText:"Configure feature items and time range for realtime features. Multi-select is supported and each feature gets its own X/Y chart.",trendSelectionTitle:"History Trend Selection",trendSelectionText:"Configure feature items and time range for history trend. Multi-select is supported and each feature gets its own X/Y chart.",waveformTab:"Realtime Waveform",realtimeTab:"Realtime Features",trendTab:"History Trend",chartTitle:"Latest Waveform Line Chart",chartText:"Shows the full waveform from the latest direct acquisition plus the recent acquisition records table below.",tableTitle:"Recent Acquisition Records",featureRealtimeTitle:"Realtime Features",featureRealtimeText:"This section shows features already written to MySQL with a small acceptable delay.",featureRealtimeKey:"Realtime Features",featureRealtimeRange:"Realtime Range",featureRealtimeCurrent:"Latest Value",featureRealtimePoints:"Point Count",featureRealtimeRefreshNote:"Auto refresh: updates every 15 seconds",featureTrendTitle:"History Trend",featureTrendText:"Loads trend lines from MySQL for the selected feature set and time range.",featureTrendKey:"Trend Features",featureTrendRange:"Trend Range",featureTrendRefreshNote:"History trend does not auto refresh. It updates when you change selections, ranges, or click Refresh.",xAxis:"X Axis: Time",yAxis:"Y Axis: Feature Value",noFeatureData:"No feature data exists in the selected range.",noData:"No direct acquisition result is available yet. Stop RC2 first and let the DEMO runtime take over port 8234.",colTime:"Collected At",colMachine:"Machine",colPoints:"Points",colFreq:"Frequency",colLatest:"Latest",colMin:"Min",colMax:"Max"}
+      };
+      var state = {lang: localStorage.getItem("open-dashboard-lang") || "zh",activeView: "waveform",payload: null,saving: false,editing: false,refreshPausedUntil: 0,flash: { type: "", text: "" },featureOptions: [],rangeOptions: [],featureRealtimeSeries: {},featureTrendSeries: {}};
+      var refs = {};
+      function t(){return translations[state.lang] || translations.zh;}
+      function esc(v){return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+      function setText(name,value){if(refs[name]){refs[name].textContent=value;}}
+      function currentPayload(){return state.payload || {enabled:true,connected:false,initialized:false,lastError:"",lastCollectedAtText:"",settings:{samplingFrequency:5000,acquisitionDurationMillis:1000,acquisitionIntervalMillis:10000,samplingNum:5000},latest:{values:[]},history:[]};}
+      function formatNumber(value,digits){return Number(value || 0).toFixed(digits);}
+      function featureLabel(feature){return state.lang === "zh" ? feature.labelZh : feature.labelEn;}
+      function rangeLabel(range){return state.lang === "zh" ? range.labelZh : range.labelEn;}
+      function formatDurationText(milliseconds){var value=Number(milliseconds || 0); if(value % 1000 === 0){var seconds=value/1000; return state.lang === "zh" ? (seconds + " 秒") : (seconds + " s");} return state.lang === "zh" ? (value + " 毫秒") : (value + " ms");}
+      function buildSampleRule(settings){var strings=t(),template=strings.sampleRuleTemplate || ''; return template.replace('{duration}',formatDurationText(settings.acquisitionDurationMillis || 0)).replace('{interval}',formatDurationText(settings.acquisitionIntervalMillis || 0));}
+      function selectedValues(select){return Array.prototype.slice.call(select.options).filter(function(option){return option.selected;}).map(function(option){return option.value;});}
+      function selectMany(select,values){Array.prototype.forEach.call(select.options,function(option){option.selected=values.indexOf(option.value)>=0;});}
+      function ensureSelectionDefaults(){if(!state.featureOptions.length){return;} refs.featureRealtimeKeys.innerHTML=state.featureOptions.map(function(feature){return '<option value="'+esc(feature.key)+'">'+esc(featureLabel(feature))+'</option>';}).join(""); refs.featureTrendKeys.innerHTML=refs.featureRealtimeKeys.innerHTML; refs.featureRealtimeRange.innerHTML=state.rangeOptions.map(function(range){return '<option value="'+esc(range.key)+'">'+esc(rangeLabel(range))+'</option>';}).join(""); refs.featureTrendRange.innerHTML=refs.featureRealtimeRange.innerHTML; selectMany(refs.featureRealtimeKeys,["time_rms","time_peak"]); selectMany(refs.featureTrendKeys,["time_rms","freq_spectral_centroid"]); refs.featureRealtimeRange.value="1h"; refs.featureTrendRange.value="1d";}
+      function updateLeftPanels(){var viewClass=state.activeView === "featureRealtime" ? "view-featureRealtime" : (state.activeView === "featureTrend" ? "view-featureTrend" : "view-waveform"); refs.leftColumn.className="left-column "+viewClass; Array.prototype.forEach.call(refs.leftColumn.querySelectorAll(".stack-card"),function(card){var role=card.getAttribute("data-panel-role"); var isActive=(state.activeView === "waveform" && role === "settings") || (state.activeView === "featureRealtime" && role === "realtime-selection") || (state.activeView === "featureTrend" && role === "trend-selection"); card.classList.toggle("active",isActive); card.classList.toggle("inactive",!isActive);});}
+      function updateTabs(){[{key:"waveform",button:refs.waveformTab,panel:refs.viewWaveform},{key:"featureRealtime",button:refs.featureRealtimeTab,panel:refs.viewFeatureRealtime},{key:"featureTrend",button:refs.featureTrendTab,panel:refs.viewFeatureTrend}].forEach(function(item){var active=state.activeView === item.key; item.button.className=active ? "tab-button active" : "tab-button"; item.panel.className=active ? "view-panel active" : "view-panel";}); updateLeftPanels();}
+      function setLanguage(){var strings=t(); document.documentElement.lang=state.lang === "zh" ? "zh-CN" : "en"; var map={badge:"badge",title:"title",subtitle:"subtitle",langToggle:"switchLabel",refreshButton:"refresh",logoutButton:"logout",metricSourceLabel:"source",metricSourceValue:"sourceValue",metricModeLabel:"module",metricModeValue:"moduleValue",metricApiLabel:"api",metricApiValue:"apiValue",metricHistoryLabel:"records",metricStatusLabel:"metricStatus",settingsTitle:"settingsTitle",settingsText:"settingsText",enabledLabel:"enabled",samplingFrequencyLabel:"samplingFrequency",durationLabel:"duration",intervalLabel:"interval",realtimeSelectionTitle:"realtimeSelectionTitle",realtimeSelectionText:"realtimeSelectionText",trendSelectionTitle:"trendSelectionTitle",trendSelectionText:"trendSelectionText",featureRealtimeKeyLabel:"featureRealtimeKey",featureRealtimeRangeLabel:"featureRealtimeRange",featureTrendKeyLabel:"featureTrendKey",featureTrendRangeLabel:"featureTrendRange",waveformTab:"waveformTab",featureRealtimeTab:"realtimeTab",featureTrendTab:"trendTab",chartTitle:"chartTitle",chartText:"chartText",tableTitle:"tableTitle",featureRealtimeTitle:"featureRealtimeTitle",featureRealtimeText:"featureRealtimeText",featureRealtimeCurrentLabel:"featureRealtimeCurrent",featureRealtimePointsLabel:"featureRealtimePoints",featureRealtimeRefreshNote:"featureRealtimeRefreshNote",featureTrendTitle:"featureTrendTitle",featureTrendText:"featureTrendText",featureTrendRefreshNote:"featureTrendRefreshNote",colTime:"colTime",colMachine:"colMachine",colPoints:"colPoints",colFreq:"colFreq",colLatest:"colLatest",colMin:"colMin",colMax:"colMax"}; Object.keys(map).forEach(function(key){setText(key,strings[map[key]]);}); refs.saveButton.textContent=state.saving ? strings.saveSaving : strings.save; ensureSelectionDefaults(); updateTabs(); updateView();}
+      function updateStatusBanner(payload){var strings=t(); var detail=[]; if(payload.connected){detail.push(strings.connected);} else if(payload.lastError){detail.push(strings.errorPrefix + ": " + payload.lastError);} else {detail.push(strings.waiting);} if(payload.lastCollectedAtText){detail.push(strings.lastCollectedAt + ": " + payload.lastCollectedAtText);} refs.metricStatusDetail.textContent=detail.join('\n');}
+      function updateForm(payload,force){if((state.editing || state.saving) && !force){return;} refs.enabledInput.checked=!!payload.enabled; refs.samplingFrequency.value=payload.settings.samplingFrequency || 0; refs.acquisitionDurationMillis.value=payload.settings.acquisitionDurationMillis || 1000; refs.acquisitionIntervalMillis.value=payload.settings.acquisitionIntervalMillis || 10000; refs.sampleCountHint.textContent=t().sampleCount + ": " + payload.settings.samplingNum + " | " + buildSampleRule(payload.settings || {});}
+      function renderSvgChart(svg,points,xAccessor,yAccessor,xFormatter){if(!points || !points.length){svg.innerHTML=""; return;} var width=1000,height=320,left=72,right=28,top=18,bottom=42,plotWidth=width-left-right,plotHeight=height-top-bottom; var xValues=points.map(xAccessor),yValues=points.map(yAccessor),minX=Math.min.apply(null,xValues),maxX=Math.max.apply(null,xValues),minY=Math.min.apply(null,yValues),maxY=Math.max.apply(null,yValues); if(minX===maxX){maxX=minX+1;} if(minY===maxY){minY-=1; maxY+=1;} var html=['<line x1="'+left+'" y1="'+top+'" x2="'+left+'" y2="'+(top+plotHeight)+'" stroke="#8aa6c4" stroke-width="1.2"></line>','<line x1="'+left+'" y1="'+(top+plotHeight)+'" x2="'+(left+plotWidth)+'" y2="'+(top+plotHeight)+'" stroke="#8aa6c4" stroke-width="1.2"></line>']; for(var gy=0;gy<=4;gy+=1){var yRatio=gy/4,yCoord=top+plotHeight-(plotHeight*yRatio),yValue=minY+(maxY-minY)*yRatio; html.push('<line x1="'+left+'" y1="'+yCoord.toFixed(2)+'" x2="'+(left+plotWidth)+'" y2="'+yCoord.toFixed(2)+'" stroke="#d9e7f4" stroke-dasharray="4 4"></line>'); html.push('<text x="'+(left-10)+'" y="'+(yCoord+4).toFixed(2)+'" text-anchor="end" font-size="12" fill="#5f7895">'+esc(formatNumber(yValue,4))+'</text>');} var xLabelCount=Math.min(points.length,4),path=[]; for(var gx=0;gx<xLabelCount;gx+=1){var pointIndex=xLabelCount===1?0:Math.round((points.length-1)*(gx/(xLabelCount-1))),xValue=xAccessor(points[pointIndex]),xCoord=left+((xValue-minX)/(maxX-minX))*plotWidth; html.push('<line x1="'+xCoord.toFixed(2)+'" y1="'+top+'" x2="'+xCoord.toFixed(2)+'" y2="'+(top+plotHeight)+'" stroke="#edf2f8"></line>'); html.push('<text x="'+xCoord.toFixed(2)+'" y="'+(top+plotHeight+22)+'" text-anchor="middle" font-size="12" fill="#5f7895">'+esc(xFormatter(points[pointIndex]))+'</text>');} for(var index=0;index<points.length;index+=1){var x=left+((xAccessor(points[index])-minX)/(maxX-minX))*plotWidth,y=top+plotHeight-((yAccessor(points[index])-minY)/(maxY-minY))*plotHeight; path.push((index===0?"M":"L")+x.toFixed(2)+" "+y.toFixed(2)); html.push('<circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="3" fill="#0b5bd3"></circle>');} html.push('<path d="'+path.join(" ")+'" fill="none" stroke="#0b5bd3" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path>'); svg.innerHTML=html.join("");}
+      function buildWaveformChart(values){if(!values || !values.length){refs.chartSvg.innerHTML=""; return;} renderSvgChart(refs.chartSvg,values.map(function(v,i){return {x:i,y:Number(v || 0)};}),function(p){return p.x;},function(p){return p.y;},function(p){return String(p.x);});}
+      function buildRows(history){if(!history || !history.length){refs.historyBody.innerHTML='<tr><td colspan="7">'+esc(t().noData)+'</td></tr>'; return;} refs.historyBody.innerHTML=history.map(function(item){return '<tr><td>'+esc(item.collectedAtText)+'</td><td>'+esc(item.machineId)+'</td><td>'+esc(item.valueCount)+'</td><td>'+esc(item.samplingFrequency)+'</td><td>'+esc(formatNumber(item.latestValue,4))+'</td><td>'+esc(formatNumber(item.minValue,4))+'</td><td>'+esc(formatNumber(item.maxValue,4))+'</td></tr>';}).join("");}
+      function featureChartSubtitle(){var strings=t(); return strings.xAxis + ' | ' + strings.yAxis;}
+      function openChartOverlay(title,subtitle,points){refs.chartOverlayTitle.textContent=title || ''; refs.chartOverlaySubtitle.textContent=subtitle || ''; renderSvgChart(refs.chartOverlaySvg,points || [],function(point){return Number(point.collectedAt || 0);},function(point){return Number(point.value || 0);},function(point){return String(point.collectedAtText || '').slice(11,19);}); refs.chartOverlay.classList.add('active'); refs.chartOverlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';}
+      function closeChartOverlay(){refs.chartOverlay.classList.remove('active'); refs.chartOverlay.setAttribute('aria-hidden','true'); refs.chartOverlaySvg.innerHTML=''; document.body.style.overflow='';}
+      function renderFeatureCards(container,seriesMap){var keys=Object.keys(seriesMap),subtitle=featureChartSubtitle(),strings=t(); if(!keys.length){container.innerHTML='<div class="chart-card"><div class="chart-empty">'+esc(strings.noFeatureData)+'</div></div>'; return;} container.innerHTML=keys.map(function(key){var payload=seriesMap[key],title=featureLabel(payload.feature); return '<div class="chart-card"><div class="chart-card-title">'+esc(title)+'</div><div class="chart-card-subtitle">'+esc(subtitle)+'</div><div class="chart-shell"><svg id="svg-'+esc(container.id+'-'+key)+'" class="chart-svg" viewBox="0 0 1000 320" preserveAspectRatio="none"></svg></div><button type="button" class="chart-card-expand" data-feature-key="'+esc(key)+'" aria-label="Expand chart"><span>+</span></button></div>';}).join(""); keys.forEach(function(key){var payload=seriesMap[key],svg=document.getElementById('svg-'+container.id+'-'+key),button=container.querySelector('.chart-card-expand[data-feature-key="'+key.replace(/"/g,'&quot;')+'"]'); renderSvgChart(svg,payload.points || [],function(point){return Number(point.collectedAt || 0);},function(point){return Number(point.value || 0);},function(point){return String(point.collectedAtText || '').slice(11,19);}); if(button){button.onclick=function(){openChartOverlay(featureLabel(payload.feature),subtitle,payload.points || []);};}});}
+      function realtimeStatusLabel(payload){if(payload.connected){return state.lang === "zh" ? "已连接" : "Connected";} if(payload.lastError){return state.lang === "zh" ? "异常" : "Error";} return state.lang === "zh" ? "等待中" : "Waiting";}
+      function updateView(forceForm){var payload=currentPayload(),firstRealtimeKey=Object.keys(state.featureRealtimeSeries)[0],firstRealtime=firstRealtimeKey ? state.featureRealtimeSeries[firstRealtimeKey] : null; refs.metricHistoryValue.textContent=String((payload.history || []).length); refs.metricStatusValue.textContent=realtimeStatusLabel(payload); updateStatusBanner(payload); updateForm(payload,!!forceForm); buildWaveformChart(payload.latest && payload.latest.values ? payload.latest.values : []); buildRows(payload.history || []); refs.featureRealtimeCurrentValue.textContent=formatNumber(firstRealtime ? firstRealtime.latestValue : 0,4); refs.featureRealtimePointsValue.textContent=String(firstRealtime ? firstRealtime.pointCount : 0); renderFeatureCards(refs.featureRealtimeGrid,state.featureRealtimeSeries); renderFeatureCards(refs.featureTrendGrid,state.featureTrendSeries); refs.saveMessage.className='flash-message'+(state.flash.type ? ' '+state.flash.type : ''); refs.saveMessage.textContent=state.flash.text || ''; refs.saveButton.textContent=state.saving ? t().saveSaving : t().save;}
+      function captureEditing(){refs.settingsForm.addEventListener('focusin',function(){state.editing=true; state.refreshPausedUntil=Date.now()+15000; updateStatusBanner(currentPayload());}); refs.settingsForm.addEventListener('focusout',function(){window.setTimeout(function(){if(!refs.settingsForm.contains(document.activeElement)){state.editing=false; updateView();}},0);});}
+      function shouldPauseRefresh(){return state.editing || state.saving || Date.now() < state.refreshPausedUntil;}
+      function fetchJson(url){return fetch(url).then(function(response){if(!response.ok){throw new Error('HTTP '+response.status);} return response.json();});}
+      function loadStatus(force){if(!force && shouldPauseRefresh()){updateStatusBanner(currentPayload()); return;} fetchJson('/api/acquisition/status').then(function(payload){state.payload=payload; if(!state.flash.type || state.flash.type === 'success'){state.flash={type:'',text:''};} updateView(false);}).catch(function(error){state.flash={type:'error',text:(error && error.message) || 'Load failed'}; updateView(false);});}
+      function loadFeatureOptions(){fetchJson('/api/features/options').then(function(payload){state.featureOptions=payload.features || []; state.rangeOptions=payload.rangeOptions || []; ensureSelectionDefaults(); loadFeatureRealtime(); loadFeatureTrend();}).catch(function(){state.featureOptions=[]; state.rangeOptions=[];});}
+      function loadFeatureRealtime(){var keys=selectedValues(refs.featureRealtimeKeys),range=refs.featureRealtimeRange.value; if(!keys.length || !range){state.featureRealtimeSeries={}; updateView(false); return;} Promise.all(keys.map(function(key){return fetchJson('/api/features/realtime?featureKey='+encodeURIComponent(key)+'&rangeKey='+encodeURIComponent(range));})).then(function(responses){var series={}; responses.forEach(function(payload){series[payload.featureKey]=payload;}); state.featureRealtimeSeries=series; updateView(false);}).catch(function(){state.featureRealtimeSeries={}; updateView(false);});}
+      function loadFeatureTrend(){var keys=selectedValues(refs.featureTrendKeys),range=refs.featureTrendRange.value; if(!keys.length || !range){state.featureTrendSeries={}; updateView(false); return;} Promise.all(keys.map(function(key){return fetchJson('/api/features/trend?featureKey='+encodeURIComponent(key)+'&rangeKey='+encodeURIComponent(range));})).then(function(responses){var series={}; responses.forEach(function(payload){series[payload.featureKey]=payload;}); state.featureTrendSeries=series; updateView(false);}).catch(function(){state.featureTrendSeries={}; updateView(false);});}
+      function saveSettings(){state.saving=true; state.flash={type:'',text:''}; updateView(false); fetch('/api/acquisition/settings',{method:'POST',headers:{'Content-Type':'application/json; charset=UTF-8'},body:JSON.stringify({enabled:refs.enabledInput.checked,acquisitionDurationMillis:Number(refs.acquisitionDurationMillis.value),acquisitionIntervalMillis:Number(refs.acquisitionIntervalMillis.value)})}).then(function(response){if(!response.ok){return response.text().then(function(text){throw new Error(text || ('HTTP '+response.status));});} return response.json();}).then(function(saved){state.payload=saved; state.saving=false; state.editing=false; state.refreshPausedUntil=0; state.flash={type:'success',text:t().saveSuccess}; updateView(true);}).catch(function(error){state.saving=false; state.flash={type:'error',text:t().saveFailed+': '+((error && error.message) || '')}; updateView(false);});}
+      function bindEvents(){refs.langToggle.onclick=function(){state.lang=state.lang === 'zh' ? 'en' : 'zh'; localStorage.setItem('open-dashboard-lang',state.lang); setLanguage();}; refs.refreshButton.onclick=function(){loadStatus(true); loadFeatureRealtime(); loadFeatureTrend();}; refs.logoutButton.onclick=function(){fetch('/api/logout',{method:'POST',credentials:'same-origin'}).finally(function(){window.location.href='/login/';});}; refs.settingsForm.onsubmit=function(event){event.preventDefault(); saveSettings();}; refs.waveformTab.onclick=function(){state.activeView='waveform'; updateTabs();}; refs.featureRealtimeTab.onclick=function(){state.activeView='featureRealtime'; updateTabs();}; refs.featureTrendTab.onclick=function(){state.activeView='featureTrend'; updateTabs();}; refs.featureRealtimeKeys.onchange=loadFeatureRealtime; refs.featureRealtimeRange.onchange=loadFeatureRealtime; refs.featureTrendKeys.onchange=loadFeatureTrend; refs.featureTrendRange.onchange=loadFeatureTrend; refs.chartOverlayClose.onclick=closeChartOverlay; refs.chartOverlay.onclick=function(event){if(event.target === refs.chartOverlay){closeChartOverlay();}}; document.addEventListener('keydown',function(event){if(event.key === 'Escape' && refs.chartOverlay.classList.contains('active')){closeChartOverlay();}}); captureEditing();}
+      function initRefs(){refs={leftColumn:document.querySelector('.left-column'),badge:document.getElementById('badge'),title:document.getElementById('title'),subtitle:document.getElementById('subtitle'),langToggle:document.getElementById('lang-toggle'),refreshButton:document.getElementById('refresh-button'),logoutButton:document.getElementById('logout-button'),metricSourceLabel:document.getElementById('metric-source-label'),metricSourceValue:document.getElementById('metric-source-value'),metricModeLabel:document.getElementById('metric-mode-label'),metricModeValue:document.getElementById('metric-mode-value'),metricApiLabel:document.getElementById('metric-api-label'),metricApiValue:document.getElementById('metric-api-value'),metricHistoryLabel:document.getElementById('metric-history-label'),metricHistoryValue:document.getElementById('metric-history-value'),metricStatusLabel:document.getElementById('metric-status-label'),metricStatusValue:document.getElementById('metric-status-value'),metricStatusDetail:document.getElementById('metric-status-detail'),settingsTitle:document.getElementById('settings-title'),settingsText:document.getElementById('settings-text'),enabledLabel:document.getElementById('enabled-label'),samplingFrequencyLabel:document.getElementById('sampling-frequency-label'),durationLabel:document.getElementById('duration-label'),intervalLabel:document.getElementById('interval-label'),settingsForm:document.getElementById('settings-form'),enabledInput:document.getElementById('enabled-input'),samplingFrequency:document.getElementById('samplingFrequency'),acquisitionDurationMillis:document.getElementById('acquisitionDurationMillis'),acquisitionIntervalMillis:document.getElementById('acquisitionIntervalMillis'),sampleCountHint:document.getElementById('sample-count-hint'),saveMessage:document.getElementById('save-message'),saveButton:document.getElementById('save-button'),realtimeSelectionTitle:document.getElementById('realtime-selection-title'),realtimeSelectionText:document.getElementById('realtime-selection-text'),trendSelectionTitle:document.getElementById('trend-selection-title'),trendSelectionText:document.getElementById('trend-selection-text'),featureRealtimeKeyLabel:document.getElementById('feature-realtime-key-label'),featureRealtimeRangeLabel:document.getElementById('feature-realtime-range-label'),featureTrendKeyLabel:document.getElementById('feature-trend-key-label'),featureTrendRangeLabel:document.getElementById('feature-trend-range-label'),featureRealtimeKeys:document.getElementById('featureRealtimeKeys'),featureRealtimeRange:document.getElementById('featureRealtimeRange'),featureTrendKeys:document.getElementById('featureTrendKeys'),featureTrendRange:document.getElementById('featureTrendRange'),waveformTab:document.getElementById('tab-waveform'),featureRealtimeTab:document.getElementById('tab-feature-realtime'),featureTrendTab:document.getElementById('tab-feature-trend'),viewWaveform:document.getElementById('view-waveform'),viewFeatureRealtime:document.getElementById('view-feature-realtime'),viewFeatureTrend:document.getElementById('view-feature-trend'),chartTitle:document.getElementById('chart-title'),chartText:document.getElementById('chart-text'),chartSvg:document.getElementById('chart-svg'),tableTitle:document.getElementById('table-title'),historyBody:document.getElementById('history-body'),featureRealtimeTitle:document.getElementById('feature-realtime-title'),featureRealtimeText:document.getElementById('feature-realtime-text'),featureRealtimeCurrentLabel:document.getElementById('feature-realtime-current-label'),featureRealtimeCurrentValue:document.getElementById('feature-realtime-current-value'),featureRealtimePointsLabel:document.getElementById('feature-realtime-points-label'),featureRealtimePointsValue:document.getElementById('feature-realtime-points-value'),featureRealtimeRefreshNote:document.getElementById('feature-realtime-refresh-note'),featureRealtimeGrid:document.getElementById('feature-realtime-grid'),featureTrendTitle:document.getElementById('feature-trend-title'),featureTrendText:document.getElementById('feature-trend-text'),featureTrendRefreshNote:document.getElementById('feature-trend-refresh-note'),featureTrendGrid:document.getElementById('feature-trend-grid'),chartOverlay:document.getElementById('chart-overlay'),chartOverlayClose:document.getElementById('chart-overlay-close'),chartOverlayTitle:document.getElementById('chart-overlay-title'),chartOverlaySubtitle:document.getElementById('chart-overlay-subtitle'),chartOverlaySvg:document.getElementById('chart-overlay-svg'),colTime:document.getElementById('col-time'),colMachine:document.getElementById('col-machine'),colPoints:document.getElementById('col-points'),colFreq:document.getElementById('col-freq'),colLatest:document.getElementById('col-latest'),colMin:document.getElementById('col-min'),colMax:document.getElementById('col-max')};}
+      initRefs(); bindEvents(); setLanguage(); loadStatus(true); loadFeatureOptions(); window.setInterval(function(){loadStatus(false);},2000); window.setInterval(function(){loadFeatureRealtime();},REFRESH_MS);
+    })();
+  </script>
+</body>
+</html>
