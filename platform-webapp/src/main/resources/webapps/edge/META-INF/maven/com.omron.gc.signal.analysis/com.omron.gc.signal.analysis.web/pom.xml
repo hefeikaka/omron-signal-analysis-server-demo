@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+
+ Licensed under
+the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance
+with the License.
+ You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in
+writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific
+language governing permissions and
+ limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.omron.gc.signal.analysis</groupId>
+		<artifactId>omron-signal-analysis-web-parent</artifactId>
+		<version>1.0.0-RC2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>com.omron.gc.signal.analysis.web</artifactId>
+	<packaging>war</packaging>
+	<name>Omron Signal Analysis Web</name>
+	<description>
+        Omron Signal Analysis Web
+	</description>
+
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<version>1.6.0</version>
+				<artifactId>exec-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<version>2.2</version>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>prepare-deploy-package</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<!-- Js -->
+								<copy todir="${project.build.directory}/webapp/public/js/">
+									<fileset dir="${basedir}/dist/" includes="**/*" />
+								</copy>
+								<copy
+									todir="${project.build.directory}/webapp/public/js/">
+									<fileset dir="${basedir}/public/context-path/public/js"
+										includes="**/*" />
+								</copy>
+								<!-- index -->
+								<copy
+									todir="${project.build.directory}/webapp/">
+									<fileset dir="${basedir}/public/" includes="index.html" />
+								</copy>
+								<copy
+									todir="${project.build.directory}/webapp/">
+									<fileset dir="${basedir}/public/context-path"
+										includes="WEB-INF/web.xml" />
+								</copy>
+
+								<!-- PageConfig -->
+
+								<copy
+									todir="${project.build.directory}/webapp/public/pageConfig/">
+									<fileset dir="${basedir}/public/context-path/public/pageConfig"
+										includes="**/*" />
+								</copy>
+								<copy
+									todir="${project.build.directory}/webapp/public/pageConfig/channel-point/">
+									<fileset
+										dir="${basedir}/public/context-path/public/pageConfig/channel-point"
+										includes="**/*" />
+								</copy>
+								<copy
+									todir="${project.build.directory}/webapp/public/pageConfig/index/">
+									<fileset
+										dir="${basedir}/public/context-path/public/pageConfig/index"
+										includes="**/*" />
+								</copy>
+								<copy
+									todir="${project.build.directory}/webapp/public/pageConfig/">
+									<fileset
+										dir="${basedir}/public/context-path/public/pageConfig/basic"
+										includes="**/*" />
+								</copy>
+
+								<copy
+									todir="${project.build.directory}/webapp/public/extensions/widgets/">
+									<fileset
+										dir="${basedir}/public/context-path/public/extensions/widgets"
+										includes="**/*" />
+								</copy>
+								<!-- css -->
+								<copy
+									todir="${project.build.directory}/webapp/public/css/">
+									<fileset dir="${basedir}/public/context-path/public/css"
+										includes="**/*" />
+								</copy>
+
+								<!-- images -->
+								<copy
+									todir="${project.build.directory}/webapp/public/images/">
+									<fileset dir="${basedir}/public/context-path/public/images"
+										includes="**/*" />
+								</copy>
+
+								<copy
+									todir="${project.build.directory}/webapp/public/resources/">
+									<fileset dir="${basedir}/public/context-path/public/resources"
+										includes="**/**" />
+								</copy>
+
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.3</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>${project.build.directory}/webapp</directory>
+						</resource>
+					</webResources>
+					<warName>${project.artifactId}-v${project.version}</warName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
