@@ -1,0 +1,176 @@
+{
+    "url": "alarm-history-list",
+    "owner": "admin",
+    "name": "alarm-history-list",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [{
+            "id": "home",
+            "name": "Home",
+            "height": 1000,
+            "content": [{
+                "type": "column",
+                "isClosable": true,
+                "title": "",
+                "content": [{
+                        "type": "row",
+                        "isClosable": true,
+                        "title": "",
+                        "height": 70,
+                        "content": [{
+                            "type": "column",
+                            "isClosable": true,
+                            "title": "",
+                            "width": 100,
+                            "content": [{
+                                "type": "stack",
+                                "isClosable": true,
+                                "title": "",
+                                "content": [{
+                                    "title": "StepHeaderWidget",
+                                    "type": "component",
+                                    "component": "StepHeaderWidget",
+                                    "props": {
+                                        "id": "StepHeaderWidget",
+                                        "configs": {
+                                            "stepConfig": {
+                                                "sessionName": "channelStep",
+                                                "stepCurrent": 5,
+                                                "steps": [{
+                                                        "title": "选择监控对象"
+                                                    },
+                                                    {
+                                                        "title": "选择因子"
+                                                    },
+                                                    {
+                                                        "title": "选择计算流程"
+                                                    },
+                                                    {
+                                                        "title": "保存点位"
+                                                    },
+                                                    {
+                                                        "title": "选择附件类型"
+                                                    },
+                                                    {
+                                                        "title": "设置附件"
+                                                    },
+                                                    {
+                                                        "title": "预览全部"
+                                                    }
+                                                ]
+                                            },
+                                            "pubsub": {
+                                                "types": [
+                                                    "subscriber",
+                                                    "publisher"
+                                                ],
+                                                "publishers": []
+                                            },
+                                            "providerConfig": {},
+                                            "isGenerated": false,
+                                            "options": {}
+                                        },
+                                        "widgetID": "StepHeaderWidget"
+                                    },
+                                    "isClosable": false,
+                                    "header": {
+                                        "show": false
+                                    },
+                                    "componentName": "lm-react-component"
+                                }]
+                            }]
+                        }]
+                    },
+                    {
+                        "type": "row",
+                        "isClosable": true,
+                        "title": "",
+                        "height": 70,
+                        "content": [{
+                            "type": "column",
+                            "isClosable": true,
+                            "title": "",
+                            "width": 100,
+                            "content": [{
+                                "type": "stack",
+                                "isClosable": true,
+                                "title": "",
+                                "content": [{
+                                    "title": "StepChanneEnclosureWidget",
+                                    "type": "component",
+                                    "component": "StepChanneEnclosureWidget",
+                                    "props": {
+                                        "id": "StepChanneEnclosureWidget",
+                                        "configs": {
+                                            "stepConfig": {
+                                                "sessionName": "channelStep",
+                                                "stepCurrent": 5,
+                                                "backSessionName": "channelBackUrlSession",
+                                                "steps": [{
+                                                        "title": "选择监控对象",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/monitor"
+                                                    },
+                                                    {
+                                                        "title": "选择因子",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/factor"
+                                                    },
+                                                    {
+                                                        "title": "选择计算流程",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/ctx"
+                                                    },
+                                                    {
+                                                        "title": "保存点位",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/save-channel"
+                                                    },
+                                                    {
+                                                        "title": "选择附件类型",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/enclosure-type"
+                                                    },
+                                                    {
+                                                        "title": "设置附件",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/enclosure"
+                                                    },
+                                                    {
+                                                        "title": "预览全部",
+                                                        "url": "/predictive-maintenance/anomaly-detection-setting/channel/batchAdd/save-enclosure"
+                                                    }
+                                                ]
+                                            },
+                                            "pubsub": {
+                                                "types": [
+                                                    "subscriber",
+                                                    "publisher"
+                                                ],
+                                                "publishers": [
+                                                    "StepHeaderWidget"
+                                                ]
+                                            },
+                                            "providerConfig": {
+                                                "configs": {}
+                                            },
+                                            "isGenerated": false,
+                                            "options": {}
+                                        },
+                                        "widgetID": "StepChanneEnclosureWidget"
+                                    },
+                                    "isClosable": false,
+                                    "header": {
+                                        "show": false
+                                    },
+                                    "componentName": "lm-react-component"
+                                }]
+                            }]
+                        }]
+                    }
+                ]
+            }]
+        }]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
