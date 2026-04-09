@@ -1,0 +1,122 @@
+{
+	"url": "setting-machine",
+	"owner": "admin",
+	"name": "setting-machine",
+	"description": "",
+	"landingPage": "home",
+	"parentId": "0",
+	"isAutoHeight": true,
+	"content": {
+		"properties": {},
+		"pages": [
+			{
+				"id": "home",
+				"name": "Home",
+				"height": 940,
+				"content": [
+					{
+						"type": "column",
+						"isClosable": true,
+						"title": "",
+						"content": [
+							{
+								"type": "row",
+								"isClosable": true,
+								"title": "",
+								"height": 100,
+								"content": [
+									{
+										"type": "stack",
+										"isClosable": true,
+										"title": "",
+										"width": 50,
+										"content": [
+											{
+												"title": "ProductionLineMachineSettingSearchWidget",
+												"type": "component",
+												"component": "ProductionLineMachineSettingSearchWidget",
+												"props": {
+													"id": "ProductionLineMachineSettingSearchWidget",
+													"configs": {
+														"pubsub": {
+															"types": [
+																"publisher"
+															]
+														},
+														"isGenerated": false,
+														"options": {},
+														"params": {
+															"status": "dispatched"
+														}
+													},
+													"widgetID": "ProductionLineMachineSettingSearchWidget"
+												},
+												"isClosable": false,
+												"header": {
+													"show": false
+												},
+												"componentName": "lm-react-component"
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "row",
+								"isClosable": true,
+								"title": "",
+								"height": 100,
+								"content": [
+									{
+										"type": "stack",
+										"isClosable": true,
+										"title": "",
+										"width": 50,
+										"content": [
+											{
+												"title": "ProductionLineMachineTableWidget",
+												"type": "component",
+												"component": "ProductionLineMachineTableWidget",
+												"props": {
+													"id": "ProductionLineMachineTableWidget",
+													"addUrl": "/setting/machine/add",
+													"editUrl": "/setting/machine/edit",
+													"subEditUrl": "/setting/machine/edit",
+													"configs": {
+														"pubsub": {
+															"types": [
+																"subscriber"
+															],
+                                                            "publishers": [
+                                                                "ProductionLineMachineSettingSearchWidget"
+                                                            ]
+														},
+														"isGenerated": false,
+														"options": {},
+														"params": {
+															"status": "dispatched"
+														}
+													},
+													"widgetID": "ProductionLineMachineTableWidget"
+												},
+												"isClosable": false,
+												"header": {
+													"show": false
+												},
+												"componentName": "lm-react-component"
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	"hasOwnerPermission": false,
+	"hasDesignerPermission": false,
+	"hasViewerPermission": false,
+	"message": "success"
+}
