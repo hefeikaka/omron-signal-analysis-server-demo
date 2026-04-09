@@ -1,0 +1,62 @@
+{
+	"url": "setting-file-purge-form",
+	"owner": "admin",
+	"name": "setting-file-purge-form",
+	"description": "",
+	"landingPage": "home",
+	"parentId": "0",
+	"isAutoHeight": true,
+	"content": {
+		"properties": {},
+		"pages": [
+			{
+				"id": "home",
+				"name": "Home",
+				"height": 1000,
+				"content": [
+					{
+						"type": "column",
+						"width": 800,
+						"isClosable": true,
+						"title": "",
+						"content": [
+							{
+								"type": "stack",
+								"isClosable": true,
+								"title": "",
+								"content": [
+									{
+										"title": "FilePurgeFormWidget",
+										"type": "component",
+										"component": "FilePurgeFormWidget",
+										"props": {
+											"id": "trace.trace.FilePurgeFormWidget",
+											"configs": {
+												"pubsub": {
+													"types": [
+														"publisher"
+													]
+												},
+												"isGenerated": false,
+												"options": {}
+											},
+											"widgetID": "FilePurgeFormWidget"
+										},
+										"isClosable": false,
+										"header": {
+											"show": false
+										},
+										"componentName": "lm-react-component"
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	"hasOwnerPermission": false,
+	"hasDesignerPermission": false,
+	"hasViewerPermission": false
+}
