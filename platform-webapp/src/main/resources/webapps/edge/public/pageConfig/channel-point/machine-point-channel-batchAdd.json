@@ -1,0 +1,70 @@
+{
+    "url": "machine-point-setting-channel-batchAdd",
+    "owner": "admin",
+    "name": "machine-point-setting-channel-batchAdd",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [
+            {
+                "id": "home",
+                "name": "Home",
+                "height": 600,
+                "content": [
+                    {
+                        "type": "column",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 480,
+                                "content": [
+                                    {
+                                        "type": "stack",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "content": [
+                                            {
+                                                "title": "SubjectAccessoryChannelAddWidget",
+                                                "type": "component",
+                                                "component": "SubjectAccessoryChannelAddWidget",
+                                                "props": {
+                                                    "id": "SubjectAccessoryChannelAddWidget",
+                                                    "configs": {
+                                                        "pubsub": {
+                                                            "types": []
+                                                        },
+                                                        "isGenerated": false,
+                                                        "options": {}
+                                                    },
+                                                    "params": {
+                                                        "type": "denso-electrical-machinery"
+                                                    },
+                                                    "widgetID": "SubjectAccessoryChannelAddWidget"
+                                                },
+                                                "isClosable": false,
+                                                "header": {
+                                                    "show": false
+                                                },
+                                                "componentName": "lm-react-component"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
