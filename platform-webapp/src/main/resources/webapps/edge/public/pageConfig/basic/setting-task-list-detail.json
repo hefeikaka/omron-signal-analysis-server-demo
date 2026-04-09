@@ -1,0 +1,72 @@
+{
+    "url": "energy-detail",
+    "owner": "admin",
+    "name": "energy-detail",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [
+            {
+                "id": "home",
+                "name": "Home",
+                "height": 940,
+                "content": [
+                    {
+                        "type": "column",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 100,
+                                "content": [
+                                    {
+                                        "type": "stack",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "width": 50,
+                                        "content": [
+                                            {
+                                                "title": "DataPurgeDatailWidget",
+                                                "type": "component",
+                                                "component": "DataPurgeDatailWidget",
+                                                "props": {
+                                                    "id": "DataPurgeDatailWidget",
+                                                    "configs": {
+                                                        "pubsub": {
+                                                            "types": []
+                                                        },
+                                                        "isGenerated": false,
+                                                        "options": {},
+                                                        "params": {
+                                                            "status": "dispatched"
+                                                        }
+                                                    },
+                                                    "widgetID": "DataPurgeDatailWidget"
+                                                },
+                                                "isClosable": false,
+                                                "header": {
+                                                    "show": false
+                                                },
+                                                "componentName": "lm-react-component"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false,
+    "message": "success"
+}
