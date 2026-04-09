@@ -1,0 +1,82 @@
+{
+    "url": "machine-point-setting-channel-add",
+    "owner": "admin",
+    "name": "machine-point-setting-channel-add",
+    "description": "",
+    "landingPage": "home",
+    "parentId": "0",
+    "isAutoHeight": true,
+    "content": {
+        "properties": {},
+        "pages": [
+            {
+                "id": "home",
+                "name": "Home",
+                "height": 600,
+                "content": [
+                    {
+                        "type": "column",
+                        "isClosable": true,
+                        "title": "",
+                        "content": [
+                            {
+                                "type": "row",
+                                "isClosable": true,
+                                "title": "",
+                                "height": 480,
+                                "content": [
+                                    {
+                                        "type": "stack",
+                                        "isClosable": true,
+                                        "title": "",
+                                        "content": [
+                                            {
+                                                "title": "SubjectAccessoryChannelTableFormWidget",
+                                                "type": "component",
+                                                "component": "SubjectAccessoryChannelTableFormWidget",
+                                                "props": {
+                                                    "id": "SubjectAccessoryChannelTableFormWidget",
+                                                    "insertUrl": "/index/point-setting/channel/batchAdd/monitor",
+                                                    "subjectType": "machine",
+                                                    "subjectTypeName": "设备",
+                                                    "machineParentId": 0,
+                                                    "returnBackUrl":"/index/point-setting/channel",
+                                                    "accessoryType":"unified",
+                                                    "controlTypeOptions": [
+                                                        {
+                                                            "label": "设备",
+                                                            "value": "machine"
+                                                        }
+                                                    ],
+                                                    "configs": {
+                                                        "pubsub": {
+                                                            "types": []
+                                                        },
+                                                        "isGenerated": false,
+                                                        "options": {}
+                                                    },
+                                                    "params": {
+                                                        "type": "denso-electrical-machinery"
+                                                    },
+                                                    "widgetID": "SubjectAccessoryChannelTableFormWidget"
+                                                },
+                                                "isClosable": false,
+                                                "header": {
+                                                    "show": false
+                                                },
+                                                "componentName": "lm-react-component"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "hasOwnerPermission": false,
+    "hasDesignerPermission": false,
+    "hasViewerPermission": false
+}
