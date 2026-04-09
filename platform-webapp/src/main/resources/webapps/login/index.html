@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <title>登录</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" href="/login/public/css/antd.css">
+  <link rel="shortcut icon" href="/login/public/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/javascript">
+    var contextPath = "/login";
+    window.contextPath = contextPath;
+
+    var currentLang = window.localStorage.getItem("open-login-lang") || "zh";
+    var headerRender = {
+      logo: window.location.origin + contextPath + "/public/images/omron-logo-white.png",
+      appName: currentLang === "zh" ? "信号分析 DEMO 平台" : "Signal Analysis DEMO"
+    };
+    var footRender = {
+      appName: currentLang === "zh" ? "信号分析 DEMO 平台" : "Signal Analysis DEMO",
+      companyName: "omron"
+    };
+    document.title = currentLang === "zh" ? "登录" : "Login";
+  </script>
+  <script src="/login/public/js/bundle.js?version=1.1.0"></script>
+  <script type="text/javascript">
+    (function () {
+      var texts = {
+        zh: {
+          lang: "English",
+          hint: "",
+          defaultHint: "",
+          error: "用户名或密码错误"
+        },
+        en: {
+          lang: "中文",
+          hint: "",
+          defaultHint: "",
+          error: "Invalid username or password"
+        }
+      };
+
+      function currentLang() {
+        return window.localStorage.getItem("open-login-lang") || "zh";
+      }
+
+      function t() {
+        return texts[currentLang()] || texts.zh;
+      }
+
+      function readValue(selectors) {
+        for (var i = 0; i < selectors.length; i += 1) {
+          var node = document.querySelector(selectors[i]);
+          if (node && typeof node.value === "string") {
+            return node.value.trim();
+          }
+        }
+        return "";
+      }
+
+      function setTitle() {
+        document.title = currentLang() === "zh" ? "登录" : "Login";
+      }
+
+      function ensureLangButton() {
+        if (document.getElementById("demo-login-lang")) {
+          return;
+        }
+        var button = document.createElement("button");
+        button.id = "demo-login-lang";
+        button.type = "button";
+        button.style.cssText = "position:fixed;top:18px;right:18px;z-index:9999;border:0;border-radius:12px;padding:10px 14px;background:#123b69;color:#fff;font-weight:700;cursor:pointer;box-shadow:0 12px 28px rgba(18,59,105,0.22);";
+        button.textContent = t().lang;
+        button.onclick = function () {
+          var next = currentLang() === "zh" ? "en" : "zh";
+          window.localStorage.setItem("open-login-lang", next);
+          window.localStorage.setItem("i18nextLng", next);
+          window.location.reload();
+        };
+        document.body.appendChild(button);
+      }
+
+      function findForm() {
+        return document.querySelector("form");
+      }
+
+      function removeInlineError() {
+        var node = document.getElementById("demo-login-error");
+        if (node && node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+      }
+
+      function showInlineError(message) {
+        removeInlineError();
+        var form = findForm();
+        if (!form) {
+          return;
+        }
+        var error = document.createElement("div");
+        error.id = "demo-login-error";
+        error.style.cssText = "margin-top:12px;color:#b42318;font-size:13px;font-weight:700;";
+        error.textContent = message;
+        form.appendChild(error);
+      }
+
+      function ensureDefaults() {
+        var username = document.querySelector('input[type="text"], input[placeholder="账号"], input[placeholder="Username"]');
+        var password = document.querySelector('input[type="password"]');
+        if (username && !username.value) {
+          username.value = "admin";
+        }
+        if (password && !password.value) {
+          password.value = "admin";
+        }
+      }
+
+      function patchForm() {
+        var form = findForm();
+        if (!form || form.__demoLoginPatched) {
+          return;
+        }
+        form.__demoLoginPatched = true;
+
+        form.addEventListener("submit", function (event) {
+          var username = readValue([
+            'input[placeholder="账号"]',
+            'input[placeholder="Username"]',
+            'input[type="text"]'
+          ]);
+          var password = readValue(['input[type="password"]']);
+
+          if (!username || !password) {
+            return;
+          }
+
+          event.preventDefault();
+          removeInlineError();
+
+          fetch("/api/gateway/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+            credentials: "same-origin",
+            body: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password)
+          }).then(function (response) {
+            if (!response.ok) {
+              throw new Error(t().error);
+            }
+            return response.json();
+          }).then(function (payload) {
+            window.location.href = payload.location || "/edge/";
+          }).catch(function (error) {
+            showInlineError((error && error.message) || t().error);
+          });
+        }, true);
+      }
+
+      function attachAll() {
+        setTitle();
+        ensureLangButton();
+        ensureDefaults();
+        patchForm();
+      }
+
+      if (document.body) {
+        new MutationObserver(attachAll).observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+
+      window.setInterval(attachAll, 500);
+      attachAll();
+    })();
+  </script>
+</body>
+</html>
